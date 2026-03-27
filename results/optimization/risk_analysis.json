@@ -25,13 +25,13 @@
     "confidence": 0.95,
     "VaR": {
       "historical_1d": 0.0174,
-      "mc_1d": 0.0199,
-      "mc_10d": 0.0629,
-      "mc_1y": 0.3159
+      "mc_1d": 0.0198,
+      "mc_10d": 0.0626,
+      "mc_1y": 0.3143
     },
     "ES": {
       "historical": 0.0281,
-      "mc": 0.0248
+      "mc": 0.0249
     }
   },
   "stress_test": {
@@ -45,7 +45,7 @@
   "shocks": {
     "vol_shock": {
       "shock_applied": 0.2,
-      "VaR_1d": 0.0238
+      "VaR_1d": 0.0237
     },
     "return_shock": {
       "shock_applied": 0.15,
@@ -54,7 +54,7 @@
     "jump_shock": {
       "jump_size": -0.1,
       "jump_prob": 0.05,
-      "VaR_1d": 0.0666
+      "VaR_1d": 0.0684
     }
   }
 }
