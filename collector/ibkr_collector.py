@@ -65,7 +65,7 @@ def save_historical_locally(df, ticker, output_dir="data/historical"):
     print(f"Historique sauvegardé : {path}")
 
 if __name__ == "__main__":
-    TICKERS = ["AAPL", "MSFT", "GOOGL", "NVDA", "META", "AMZN", "TSLA", "JPM", "JNJ", "V", "PG", "UNH", "HD", "MA", "DIS", "PYPL", "NFLX", "ADBE", "CRM"]
+    TICKERS = ["AAPL", "MSFT", "GOOGL", "NVDA", "AMZN", "JPM"]
 
     ib = connect_gateway()
 
