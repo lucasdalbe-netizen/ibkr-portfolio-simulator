@@ -31,7 +31,7 @@
     },
     "ES": {
       "historical": 0.0281,
-      "mc": 0.0249
+      "mc": 0.0248
     }
   },
   "stress_test": {
@@ -45,7 +45,7 @@
   "shocks": {
     "vol_shock": {
       "shock_applied": 0.2,
-      "VaR_1d": 0.0237
+      "VaR_1d": 0.0238
     },
     "return_shock": {
       "shock_applied": 0.15,
@@ -54,7 +54,7 @@
     "jump_shock": {
       "jump_size": -0.1,
       "jump_prob": 0.05,
-      "VaR_1d": 0.0415
+      "VaR_1d": 0.0666
     }
   }
 }
