@@ -13,7 +13,8 @@ def load_historical(ticker):
     df[col] = pd.to_datetime(df[col])
     df.set_index(col, inplace=True)
     cols_map = {c.lower(): c for c in df.columns}
-    df = df[[cols_map.get('open'), cols_map.get('high'), cols_map.get('low'), cols_map.get('close'), cols_map.get('volume')]].copy()    df.columns = ['open', 'high', 'low', 'close', 'volume']
+    df = df[[cols_map.get('open'), cols_map.get('high'), cols_map.get('low'), cols_map.get('close'), cols_map.get('volume')]].copy()
+    df.columns = ['open', 'high', 'low', 'close', 'volume']
     df['return'] = df['close'].pct_change()  # ← ajout
     return df
 
