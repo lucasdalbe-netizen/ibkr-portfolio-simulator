@@ -40,7 +40,8 @@ jobs:
           result = optimize(tickers)
 
           os.makedirs('results', exist_ok=True)
-          with open('results/portfolio_optimization.json', 'w') as f:
+          os.makedirs('results/optimization', exist_ok=True)
+          with open('results/optimization/portfolio_optimization.json', 'w') as f:
               json.dump(result, f, indent=2)
           print('Portfolio optimization done.')
           "
@@ -61,7 +62,8 @@ jobs:
           result = analyze(tickers)
 
           os.makedirs('results', exist_ok=True)
-          with open('results/risk_analysis.json', 'w') as f:
+          os.makedirs('results/optimization', exist_ok=True)
+          with open('results/optimization/risk_analysis.json', 'w') as f:
               json.dump(result, f, indent=2)
           print('Risk analysis done.')
           "
