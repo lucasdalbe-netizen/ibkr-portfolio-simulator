@@ -1,11 +1,11 @@
 {
   "ticker": "JPM",
-  "timestamp": "2026-03-27T10:42:40.749101",
+  "timestamp": "2026-03-27T10:46:19.308293",
   "last": 291.84,
   "bid": 290.97,
   "ask": 292.0,
   "high": NaN,
   "low": NaN,
-  "volume": 2179.0,
+  "volume": 2254.0,
   "close": 291.66
 }
