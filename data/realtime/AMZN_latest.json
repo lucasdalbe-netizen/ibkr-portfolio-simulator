@@ -1,11 +1,11 @@
 {
   "ticker": "AMZN",
-  "timestamp": "2026-03-27T09:35:27.836441",
-  "last": 207.3,
+  "timestamp": "2026-03-27T09:57:16.268306",
+  "last": 207.83,
   "bid": 207.4,
-  "ask": 208.0,
+  "ask": 207.85,
   "high": NaN,
   "low": NaN,
-  "volume": 36137.0,
+  "volume": 43806.0,
   "close": 207.54
 }
