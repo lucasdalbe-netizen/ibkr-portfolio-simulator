@@ -7,288 +7,97 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
-    /* ── Variables ── */
     :root {
-      --bg:        #0a0a0b;
-      --bg-card:   #111114;
-      --bg-hover:  #18181c;
-      --border:    #222228;
-      --border-hi: #333340;
-      --text:      #e8e8ec;
-      --text-muted:#686878;
-      --text-dim:  #3a3a48;
-      --accent:    #4f8ef7;
-      --accent-dim:#1a2d4a;
-      --green:     #3ecf8e;
-      --green-dim: #0d2e1e;
-      --amber:     #f5a623;
-      --amber-dim: #2e1f06;
-      --red:       #e05252;
-      --red-dim:   #2e0f0f;
-      --mono: 'IBM Plex Mono', monospace;
-      --sans: 'IBM Plex Sans', sans-serif;
+      --bg:#0a0a0b;--bg-card:#111114;--bg-hover:#18181c;
+      --border:#222228;--border-hi:#333340;
+      --text:#e8e8ec;--text-muted:#686878;--text-dim:#3a3a48;
+      --accent:#4f8ef7;--accent-dim:#1a2d4a;
+      --green:#3ecf8e;--green-dim:#0d2e1e;
+      --amber:#f5a623;--amber-dim:#2e1f06;
+      --red:#e05252;--red-dim:#2e0f0f;
+      --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
     }
-
-    /* ── Reset ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 14px; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      font-weight: 300;
-      min-height: 100vh;
-      padding: 0 0 4rem;
-    }
-
-    /* ── Header ── */
-    header {
-      border-bottom: 1px solid var(--border);
-      padding: 1.25rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      background: var(--bg);
-      z-index: 10;
-    }
-    .header-left { display: flex; align-items: baseline; gap: 1rem; }
-    .logo {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-    }
-    .header-sep { width: 1px; height: 14px; background: var(--border-hi); }
-    .header-title { font-size: 0.85rem; color: var(--text-muted); }
-    .header-right { display: flex; align-items: center; gap: 1.5rem; }
-    .last-update {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--text-dim);
-    }
-    #status-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--text-dim);
-    }
-    #status-dot.ok  { background: var(--green); box-shadow: 0 0 6px var(--green); }
-    #status-dot.err { background: var(--red);   box-shadow: 0 0 6px var(--red); }
-
-    /* ── Layout ── */
-    main { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 0; }
-
-    /* ── Tickers bar ── */
-    .tickers-bar {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-    .ticker-chip {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      padding: 3px 10px;
-      border: 1px solid var(--border-hi);
-      border-radius: 3px;
-      color: var(--text-muted);
-    }
-
-    /* ── Section label ── */
-    .section-label {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 0.75rem;
-    }
-
-    /* ── KPI cards ── */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 1px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      margin-bottom: 2rem;
-    }
-    .kpi {
-      background: var(--bg-card);
-      padding: 1.25rem 1.5rem;
-    }
-    .kpi-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-    .kpi-value {
-      font-family: var(--mono);
-      font-size: 1.6rem;
-      font-weight: 500;
-      color: var(--text);
-      line-height: 1;
-    }
-    .kpi-value.pos { color: var(--green); }
-    .kpi-value.neg { color: var(--red); }
-    .kpi-sub {
-      font-size: 0.68rem;
-      color: var(--text-dim);
-      margin-top: 0.3rem;
-      font-family: var(--mono);
-    }
-
-    /* ── Main grid ── */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      margin-bottom: 2rem;
-    }
-    .panel {
-      background: var(--bg-card);
-      padding: 1.25rem 1.5rem;
-    }
-    .panel-title {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      letter-spacing: 0.02em;
-    }
-
-    /* ── Scatter ── */
-    #scatter-wrap { position: relative; height: 220px; }
-    #scatter-wrap canvas { width: 100% !important; height: 100% !important; }
-
-    /* ── Allocation bars ── */
-    .alloc-list { display: flex; flex-direction: column; gap: 0.6rem; }
-    .alloc-row { display: flex; align-items: center; gap: 0.75rem; }
-    .alloc-ticker {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--text);
-      min-width: 46px;
-    }
-    .alloc-bar-bg {
-      flex: 1;
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .alloc-bar-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: width 0.6s ease;
-    }
-    .alloc-pct {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      min-width: 38px;
-      text-align: right;
-    }
-
-    /* ── Risk table ── */
-    .risk-table { width: 100%; border-collapse: collapse; }
-    .risk-table tr { border-bottom: 1px solid var(--border); }
-    .risk-table tr:last-child { border-bottom: none; }
-    .risk-table td { padding: 0.5rem 0; font-size: 0.78rem; }
-    .risk-table td:first-child { color: var(--text-muted); }
-    .risk-table td:last-child {
-      text-align: right;
-      font-family: var(--mono);
-      font-weight: 500;
-      color: var(--text);
-    }
-    .risk-table td.neg { color: var(--red) !important; }
-
-    /* ── Stress tests ── */
-    .stress-list { display: flex; flex-direction: column; gap: 0; }
-    .stress-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.55rem 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.78rem;
-    }
-    .stress-row:last-child { border-bottom: none; }
-    .stress-label { color: var(--text-muted); }
-    .stress-val {
-      font-family: var(--mono);
-      font-weight: 500;
-    }
-    .badge-danger {
-      background: var(--red-dim);
-      color: var(--red);
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      padding: 2px 8px;
-      border-radius: 3px;
-      border: 1px solid var(--red-dim);
-    }
-    .badge-warn {
-      background: var(--amber-dim);
-      color: var(--amber);
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      padding: 2px 8px;
-      border-radius: 3px;
-    }
-
-    /* ── Loading / error ── */
-    #loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 4rem 2rem;
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--text-dim);
-    }
-    .spinner {
-      width: 14px; height: 14px;
-      border: 1px solid var(--border-hi);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    #error-msg {
-      display: none;
-      padding: 1rem 1.5rem;
-      background: var(--red-dim);
-      border: 1px solid var(--red);
-      border-radius: 6px;
-      color: var(--red);
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      margin-bottom: 2rem;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 700px) {
-      main { padding: 1rem; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .main-grid { grid-template-columns: 1fr; }
-      header { padding: 1rem; }
-    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{font-size:14px;}
+    body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:300;min-height:100vh;padding:0 0 4rem;}
+    header{border-bottom:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10;}
+    .header-left{display:flex;align-items:baseline;gap:1rem;}
+    .logo{font-family:var(--mono);font-size:.85rem;font-weight:500;color:var(--accent);letter-spacing:.05em;}
+    .header-sep{width:1px;height:14px;background:var(--border-hi);}
+    .header-title{font-size:.85rem;color:var(--text-muted);}
+    .last-update{font-family:var(--mono);font-size:.72rem;color:var(--text-dim);}
+    #status-dot{width:7px;height:7px;border-radius:50%;background:var(--text-dim);}
+    #status-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green);}
+    #status-dot.err{background:var(--red);box-shadow:0 0 6px var(--red);}
+    .header-right{display:flex;align-items:center;gap:1.5rem;}
+    main{max-width:1200px;margin:0 auto;padding:2rem 2rem 0;}
+    .section-label{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;}
+    .tickers-bar{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap;}
+    .ticker-chip{font-family:var(--mono);font-size:.72rem;padding:3px 10px;border:1px solid var(--border-hi);border-radius:3px;color:var(--text-muted);}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:2rem;}
+    .kpi{background:var(--bg-card);padding:1.25rem 1.5rem;}
+    .kpi-label{font-size:.72rem;color:var(--text-muted);margin-bottom:.5rem;}
+    .kpi-value{font-family:var(--mono);font-size:1.6rem;font-weight:500;color:var(--text);line-height:1;}
+    .kpi-value.pos{color:var(--green);}
+    .kpi-value.neg{color:var(--red);}
+    .kpi-sub{font-size:.68rem;color:var(--text-dim);margin-top:.3rem;font-family:var(--mono);}
+    .main-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:2rem;}
+    .panel{background:var(--bg-card);padding:1.25rem 1.5rem;}
+    .panel-title{font-size:.78rem;font-weight:500;color:var(--text-muted);margin-bottom:1rem;}
+    #scatter-wrap{position:relative;height:220px;}
+    #scatter-wrap canvas{width:100%!important;height:100%!important;}
+    .alloc-list{display:flex;flex-direction:column;gap:.6rem;}
+    .alloc-row{display:flex;align-items:center;gap:.75rem;}
+    .alloc-ticker{font-family:var(--mono);font-size:.72rem;font-weight:500;color:var(--text);min-width:46px;}
+    .alloc-bar-bg{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+    .alloc-bar-fill{height:100%;background:var(--accent);border-radius:2px;}
+    .alloc-pct{font-family:var(--mono);font-size:.72rem;color:var(--text-muted);min-width:38px;text-align:right;}
+    .risk-table{width:100%;border-collapse:collapse;}
+    .risk-table tr{border-bottom:1px solid var(--border);}
+    .risk-table tr:last-child{border-bottom:none;}
+    .risk-table td{padding:.5rem 0;font-size:.78rem;}
+    .risk-table td:first-child{color:var(--text-muted);}
+    .risk-table td:last-child{text-align:right;font-family:var(--mono);font-weight:500;}
+    .risk-table td.neg{color:var(--red)!important;}
+    .stress-list{display:flex;flex-direction:column;}
+    .stress-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.78rem;}
+    .stress-row:last-child{border-bottom:none;}
+    .stress-label{color:var(--text-muted);}
+    .badge-danger{background:var(--red-dim);color:var(--red);font-family:var(--mono);font-size:.68rem;padding:2px 8px;border-radius:3px;}
+    .badge-warn{background:var(--amber-dim);color:var(--amber);font-family:var(--mono);font-size:.68rem;padding:2px 8px;border-radius:3px;}
+    .divider{border:none;border-top:1px solid var(--border);margin:2rem 0;}
+    .ticker-selector{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;}
+    .ticker-btn{font-family:var(--mono);font-size:.72rem;padding:5px 12px;border:1px solid var(--border-hi);border-radius:3px;color:var(--text-muted);background:var(--bg-card);cursor:pointer;transition:all .15s;}
+    .ticker-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .ticker-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+    .ticker-btn.unavailable{opacity:.35;cursor:not-allowed;}
+    .sliders-grid{display:flex;flex-direction:column;gap:.75rem;}
+    .slider-row{display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:.75rem;}
+    .slider-ticker{font-family:var(--mono);font-size:.72rem;font-weight:500;color:var(--text);}
+    .slider-pct{font-family:var(--mono);font-size:.72rem;color:var(--text-muted);text-align:right;}
+    input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;}
+    .weights-total{font-family:var(--mono);font-size:.72rem;color:var(--text-dim);}
+    .weights-total.ok{color:var(--green);}
+    .weights-total.warn{color:var(--amber);}
+    .btn-normalize{font-family:var(--mono);font-size:.72rem;padding:5px 14px;border:1px solid var(--border-hi);border-radius:3px;color:var(--text-muted);background:transparent;cursor:pointer;transition:all .15s;}
+    .btn-normalize:hover{border-color:var(--accent);color:var(--accent);}
+    .custom-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:2rem;}
+    .stress-inputs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:2rem;}
+    .stress-input-panel{background:var(--bg-card);padding:1.25rem 1.5rem;}
+    .stress-input-title{font-size:.78rem;font-weight:500;color:var(--text-muted);margin-bottom:1rem;}
+    .input-row{display:flex;align-items:center;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);}
+    .input-row:last-child{border-bottom:none;}
+    .input-label{font-size:.78rem;color:var(--text-muted);}
+    .input-field{font-family:var(--mono);font-size:.78rem;background:var(--bg);border:1px solid var(--border-hi);border-radius:3px;color:var(--text);padding:3px 8px;width:80px;text-align:right;}
+    .input-field:focus{outline:none;border-color:var(--accent);}
+    #loading{display:flex;align-items:center;justify-content:center;gap:.75rem;padding:4rem 2rem;font-family:var(--mono);font-size:.78rem;color:var(--text-dim);}
+    .spinner{width:14px;height:14px;border:1px solid var(--border-hi);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    #error-msg{display:none;padding:1rem 1.5rem;background:var(--red-dim);border:1px solid var(--red);border-radius:6px;color:var(--red);font-family:var(--mono);font-size:.78rem;margin-bottom:2rem;}
+    @media(max-width:700px){main{padding:1rem;}.kpi-grid,.custom-kpis{grid-template-columns:repeat(2,1fr);}.main-grid,.stress-inputs-grid{grid-template-columns:1fr;}header{padding:1rem;}}
   </style>
 </head>
 <body>
-
 <header>
   <div class="header-left">
     <span class="logo">IBKR-SIM</span>
@@ -300,322 +109,275 @@
     <div id="status-dot"></div>
   </div>
 </header>
-
 <main>
   <div id="loading"><div class="spinner"></div>Chargement des données...</div>
   <div id="error-msg"></div>
   <div id="dashboard" style="display:none">
 
-    <!-- Tickers -->
+    <!-- SECTION 1 : BEST PORTFOLIO -->
     <div class="tickers-bar" id="tickers-bar"></div>
-
-    <!-- KPIs -->
     <div class="section-label">Meilleur portefeuille · Sharpe optimal</div>
     <div class="kpi-grid">
-      <div class="kpi">
-        <div class="kpi-label">Rendement annuel</div>
-        <div class="kpi-value pos" id="kpi-return">—</div>
-        <div class="kpi-sub">annualisé</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Volatilité</div>
-        <div class="kpi-value" id="kpi-vol">—</div>
-        <div class="kpi-sub">annualisée</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Ratio de Sharpe</div>
-        <div class="kpi-value" id="kpi-sharpe">—</div>
-        <div class="kpi-sub">rf = 2%</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">VaR 1j · 95%</div>
-        <div class="kpi-value neg" id="kpi-var">—</div>
-        <div class="kpi-sub">Monte Carlo</div>
-      </div>
+      <div class="kpi"><div class="kpi-label">Rendement annuel</div><div class="kpi-value pos" id="kpi-return">—</div><div class="kpi-sub">annualisé</div></div>
+      <div class="kpi"><div class="kpi-label">Volatilité</div><div class="kpi-value" id="kpi-vol">—</div><div class="kpi-sub">annualisée</div></div>
+      <div class="kpi"><div class="kpi-label">Ratio de Sharpe</div><div class="kpi-value" id="kpi-sharpe">—</div><div class="kpi-sub">rf = 2%</div></div>
+      <div class="kpi"><div class="kpi-label">VaR 1j · 95%</div><div class="kpi-value neg" id="kpi-var">—</div><div class="kpi-sub">Monte Carlo</div></div>
     </div>
-
-    <!-- Frontier + Allocation -->
-    <div class="section-label">Analyse du portefeuille</div>
     <div class="main-grid">
-      <div class="panel">
-        <div class="panel-title">Frontière efficiente</div>
-        <div id="scatter-wrap"><canvas id="scatter-chart"></canvas></div>
-      </div>
-      <div class="panel">
-        <div class="panel-title">Allocation optimale</div>
-        <div class="alloc-list" id="alloc-list"></div>
-      </div>
+      <div class="panel"><div class="panel-title">Frontière efficiente</div><div id="scatter-wrap"><canvas id="scatter-chart"></canvas></div></div>
+      <div class="panel"><div class="panel-title">Allocation optimale</div><div class="alloc-list" id="alloc-list"></div></div>
     </div>
-
-    <!-- Risk + Stress -->
-    <div class="section-label">Risque</div>
     <div class="main-grid">
+      <div class="panel"><div class="panel-title">VaR & Expected Shortfall</div><table class="risk-table" id="risk-table"></table></div>
+      <div class="panel"><div class="panel-title">Stress tests</div><div class="stress-list" id="stress-list"></div></div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- SECTION 2 : PORTFOLIO PERSONNALISÉ -->
+    <div class="section-label">Portfolio personnalisé · Simulation interactive</div>
+    <div class="main-grid" style="margin-bottom:1.5rem">
       <div class="panel">
-        <div class="panel-title">VaR & Expected Shortfall</div>
-        <table class="risk-table" id="risk-table"></table>
+        <div class="panel-title">Sélectionne tes tickers <span style="color:var(--text-dim);font-weight:300">(données collectées = actifs)</span></div>
+        <div class="ticker-selector" id="ticker-selector"></div>
       </div>
       <div class="panel">
-        <div class="panel-title">Stress tests</div>
-        <div class="stress-list" id="stress-list"></div>
+        <div class="panel-title">Poids <span style="color:var(--text-dim);font-weight:300">(total = 100%)</span></div>
+        <div class="sliders-grid" id="sliders-grid"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.75rem">
+          <div class="weights-total" id="weights-total">Total : 0%</div>
+          <button class="btn-normalize" onclick="normalizeWeights()">Normaliser à 100%</button>
+        </div>
+      </div>
+    </div>
+    <div class="section-label">Résultats · Portfolio personnalisé</div>
+    <div class="custom-kpis">
+      <div class="kpi"><div class="kpi-label">Rendement annuel</div><div class="kpi-value pos" id="c-return">—</div><div class="kpi-sub">annualisé</div></div>
+      <div class="kpi"><div class="kpi-label">Volatilité</div><div class="kpi-value" id="c-vol">—</div><div class="kpi-sub">annualisée</div></div>
+      <div class="kpi"><div class="kpi-label">Ratio de Sharpe</div><div class="kpi-value" id="c-sharpe">—</div><div class="kpi-sub">rf = 2%</div></div>
+      <div class="kpi"><div class="kpi-label">VaR 1j · 95%</div><div class="kpi-value neg" id="c-var">—</div><div class="kpi-sub">Historique</div></div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- SECTION 3 : STRESS TESTS PARAMÉTRABLES -->
+    <div class="section-label">Stress tests · Paramètres personnalisés</div>
+    <div class="stress-inputs-grid">
+      <div class="stress-input-panel">
+        <div class="stress-input-title">Paramètres des chocs</div>
+        <div class="input-row"><span class="input-label">Choc volatilité (%)</span><input class="input-field" id="in-vol-shock" type="number" value="20" min="0" max="200" step="1" oninput="computeCustomStress()" /></div>
+        <div class="input-row"><span class="input-label">Choc rendement (%)</span><input class="input-field" id="in-ret-shock" type="number" value="15" min="-100" max="100" step="1" oninput="computeCustomStress()" /></div>
+        <div class="input-row"><span class="input-label">Jump size (%)</span><input class="input-field" id="in-jump-size" type="number" value="-10" min="-50" max="0" step="1" oninput="computeCustomStress()" /></div>
+        <div class="input-row"><span class="input-label">Jump probabilité (%)</span><input class="input-field" id="in-jump-prob" type="number" value="5" min="0.1" max="50" step="0.1" oninput="computeCustomStress()" /></div>
+        <div class="input-row"><span class="input-label">Niveau de confiance (%)</span><input class="input-field" id="in-confidence" type="number" value="95" min="90" max="99" step="1" oninput="computeCustomStress()" /></div>
+      </div>
+      <div class="stress-input-panel">
+        <div class="stress-input-title">Résultats · Portfolio actif</div>
+        <div class="stress-list" id="custom-stress-list"></div>
       </div>
     </div>
 
-  </div><!-- /dashboard -->
+  </div>
 </main>
-
 <script>
-/*
-  ──────────────────────────────────────────────────────────────
-  CONFIG — Remplace par ton repo GitHub
-  Les fichiers JSON sont lus directement depuis GitHub (raw)
-  ──────────────────────────────────────────────────────────────
-*/
-const REPO = "lucasdalbe-netizen/ibkr-portfolio-simulator";
-const BRANCH = "main";
+const REPO="lucasdalbe-netizen/ibkr-portfolio-simulator";
+const BRANCH="main";
+const AVAILABLE_TICKERS=["AAPL","MSFT","GOOGL","AMZN","NVDA","META","TSLA","BRK-B","JPM","JNJ","V","PG","UNH","HD","MA","DIS","PYPL","NFLX","ADBE","CRM"];
+const RF=0.02;
+let optData=null,riskData=null,returnsData={},selectedTickers=[],weights={};
 
-function rawUrl(path) {
-  return `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${path}`;
+function rawUrl(p){return`https://raw.githubusercontent.com/${REPO}/${BRANCH}/${p}`;}
+const pct=v=>(v>=0?"+":"")+(v*100).toFixed(2)+"%";
+const pct2=v=>(v*100).toFixed(2)+"%";
+const fmt2=v=>parseFloat(v).toFixed(2);
+function setEl(id,val){const e=document.getElementById(id);if(e)e.textContent=val;}
+
+async function fetchJSON(path){const res=await fetch(rawUrl(path));if(!res.ok)throw new Error(`HTTP ${res.status} — ${path}`);return res.json();}
+
+async function loadReturnsCSV(ticker){
+  try{
+    const res=await fetch(rawUrl(`data/historical/${ticker}_1y.csv`));
+    if(!res.ok)return null;
+    const text=await res.text();
+    const lines=text.trim().split('\n');
+    const header=lines[0].toLowerCase().split(',');
+    const ci=header.findIndex(h=>h.trim()==='close');
+    if(ci===-1)return null;
+    const closes=lines.slice(1).map(l=>parseFloat(l.split(',')[ci])).filter(v=>!isNaN(v));
+    const r=[];
+    for(let i=1;i<closes.length;i++)r.push(Math.log(closes[i]/closes[i-1]));
+    return r;
+  }catch{return null;}
 }
 
-/* ── Helpers ── */
-const pct  = v => (v >= 0 ? "+" : "") + (v * 100).toFixed(2) + "%";
-const pct2 = v => (v * 100).toFixed(2) + "%";
-const fmt2 = v => parseFloat(v).toFixed(2);
-
-function setEl(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-/* ── Fetch JSON ── */
-async function fetchJSON(path) {
-  const res = await fetch(rawUrl(path));
-  if (!res.ok) throw new Error(`HTTP ${res.status} — ${path}`);
-  return res.json();
-}
-
-/* ── Main ── */
-async function init() {
-  try {
-    // Chargement parallèle des deux fichiers
-    const [opt, risk] = await Promise.all([
-      fetchJSON("results/optimization/portfolio_optimization.json"),
-      fetchJSON("results/optimization/risk_analysis.json"),
-    ]);
-
-    document.getElementById("loading").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
-    document.getElementById("status-dot").className = "ok";
-    document.getElementById("last-update").textContent =
-      new Date().toLocaleDateString("fr-FR", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
-
-    renderTickers(opt.tickers);
-    renderKPIs(opt, risk);
-    renderScatter(opt);
-    renderAllocation(opt);
-    renderRisk(risk);
-    renderStress(risk);
-
-  } catch (err) {
-    document.getElementById("loading").style.display = "none";
-    const errEl = document.getElementById("error-msg");
-    errEl.style.display = "block";
-    errEl.textContent = "Erreur de chargement : " + err.message
-      + " — Lance d'abord le collector puis push_to_github.py";
-    document.getElementById("status-dot").className = "err";
+async function init(){
+  try{
+    [optData,riskData]=await Promise.all([fetchJSON("results/optimization/portfolio_optimization.json"),fetchJSON("results/optimization/risk_analysis.json")]);
+    document.getElementById("loading").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+    document.getElementById("status-dot").className="ok";
+    document.getElementById("last-update").textContent=new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    renderTickers(optData.tickers);
+    renderKPIs(optData,riskData);
+    renderScatter(optData);
+    renderAllocation(optData);
+    renderRisk(riskData);
+    renderStress(riskData);
+    await buildTickerSelector();
+  }catch(err){
+    document.getElementById("loading").style.display="none";
+    const e=document.getElementById("error-msg");e.style.display="block";
+    e.textContent="Erreur : "+err.message+" — Lance d'abord le collector puis push_to_github.py";
+    document.getElementById("status-dot").className="err";
   }
 }
 
-/* ── Tickers chips ── */
-function renderTickers(tickers) {
-  const bar = document.getElementById("tickers-bar");
-  tickers.forEach(t => {
-    const chip = document.createElement("div");
-    chip.className = "ticker-chip";
-    chip.textContent = t;
-    bar.appendChild(chip);
+function renderTickers(tickers){const bar=document.getElementById("tickers-bar");tickers.forEach(t=>{const c=document.createElement("div");c.className="ticker-chip";c.textContent=t;bar.appendChild(c);});}
+
+function renderKPIs(opt,risk){const bs=opt.best_sharpe;setEl("kpi-return",pct(bs.return));setEl("kpi-vol",pct2(bs.volatility));setEl("kpi-sharpe",fmt2(bs.sharpe));setEl("kpi-var","-"+pct2(risk.var_es.VaR.mc_1d));}
+
+function renderScatter(opt){
+  const all=opt.portfolios;const step=Math.max(1,Math.floor(all.length/2000));const sample=all.filter((_,i)=>i%step===0);
+  const ctx=document.getElementById("scatter-chart").getContext("2d");
+  new Chart(ctx,{type:"scatter",data:{datasets:[
+    {label:"Simulations",data:sample.map(p=>({x:+(p.volatility*100).toFixed(3),y:+(p.return*100).toFixed(3)})),pointRadius:1.5,pointBackgroundColor:"rgba(79,142,247,0.25)",pointBorderWidth:0},
+    {label:"Frontière efficiente",data:opt.frontier.map(p=>({x:+(p.volatility*100).toFixed(3),y:+(p.return*100).toFixed(3)})),type:"line",pointRadius:0,borderColor:"rgba(79,142,247,0.7)",borderWidth:1.5,fill:false,tension:0.4},
+    {label:"Meilleur Sharpe",data:[{x:+(opt.best_sharpe.volatility*100).toFixed(3),y:+(opt.best_sharpe.return*100).toFixed(3)}],pointRadius:6,pointBackgroundColor:"#f5a623",pointBorderWidth:0},
+    {label:"Min volatilité",data:[{x:+(opt.min_vol.volatility*100).toFixed(3),y:+(opt.min_vol.return*100).toFixed(3)}],pointRadius:6,pointBackgroundColor:"#3ecf8e",pointBorderWidth:0},
+  ]},options:{responsive:true,maintainAspectRatio:false,animation:false,
+    plugins:{legend:{labels:{color:"#686878",font:{family:"'IBM Plex Mono'",size:10},boxWidth:8,padding:12}},
+      tooltip:{backgroundColor:"#111114",borderColor:"#333340",borderWidth:1,titleColor:"#e8e8ec",bodyColor:"#686878",titleFont:{family:"'IBM Plex Mono'",size:11},bodyFont:{family:"'IBM Plex Mono'",size:10},callbacks:{label:c=>`Vol: ${c.parsed.x.toFixed(2)}%  Ret: ${c.parsed.y.toFixed(2)}%`}}},
+    scales:{x:{title:{display:true,text:"Volatilité (%)",color:"#3a3a48",font:{size:10,family:"'IBM Plex Mono'"}},grid:{color:"#18181c"},ticks:{color:"#3a3a48",font:{family:"'IBM Plex Mono'",size:10}}},
+      y:{title:{display:true,text:"Rendement (%)",color:"#3a3a48",font:{size:10,family:"'IBM Plex Mono'"}},grid:{color:"#18181c"},ticks:{color:"#3a3a48",font:{family:"'IBM Plex Mono'",size:10}}}}}});
+}
+
+function renderAllocation(opt){
+  const w=opt.best_sharpe.weights;const list=document.getElementById("alloc-list");
+  const sorted=Object.entries(w).sort((a,b)=>b[1]-a[1]);const max=sorted[0][1];
+  sorted.forEach(([t,v])=>{const row=document.createElement("div");row.className="alloc-row";row.innerHTML=`<span class="alloc-ticker">${t}</span><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${(v/max*100).toFixed(1)}%"></div></div><span class="alloc-pct">${(v*100).toFixed(1)}%</span>`;list.appendChild(row);});
+}
+
+function renderRisk(risk){
+  const v=risk.var_es;
+  [["VaR historique 1j","-"+pct2(v.VaR.historical_1d)],["VaR Monte Carlo 1j","-"+pct2(v.VaR.mc_1d)],["VaR MC 10j","-"+pct2(v.VaR.mc_10d)],["VaR MC 1 an","-"+pct2(v.VaR.mc_1y)],["ES historique","-"+pct2(v.ES.historical)],["ES Monte Carlo","-"+pct2(v.ES.mc)]].forEach(([l,v])=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${l}</td><td class="neg">${v}</td>`;document.getElementById("risk-table").appendChild(tr);});
+}
+
+function renderStress(risk){
+  const s=risk.stress_test,sh=risk.shocks,list=document.getElementById("stress-list");
+  [{label:"Pire jour",html:`<span class="badge-danger">${pct(s.worst_day.return)} · ${s.worst_day.date}</span>`},{label:"5 pires jours cumulés",html:`<span style="font-family:var(--mono);font-weight:500;color:var(--red)">${pct(s.worst_5_days_cumulative)}</span>`},{label:"Max drawdown",html:`<span style="font-family:var(--mono);font-weight:500;color:var(--red)">${pct(s.max_drawdown)}</span>`},{label:"Choc vol +20%",html:`<span class="badge-warn">VaR ${pct2(sh.vol_shock.VaR_1d)}</span>`},{label:"Choc return +15%",html:`<span class="badge-warn">VaR ${pct2(sh.return_shock.VaR_1d)}</span>`},{label:`Jump ${pct(sh.jump_shock.jump_size)} (p=${sh.jump_shock.jump_prob})`,html:`<span class="badge-warn">VaR ${pct2(sh.jump_shock.VaR_1d)}</span>`}].forEach(r=>{const d=document.createElement("div");d.className="stress-row";d.innerHTML=`<span class="stress-label">${r.label}</span>${r.html}`;list.appendChild(d);});
+}
+
+async function buildTickerSelector(){
+  // Précharger les returns des tickers collectés
+  await Promise.all(optData.tickers.map(async t=>{const r=await loadReturnsCSV(t);if(r)returnsData[t]=r;}));
+  const allTickers=[...new Set([...optData.tickers,...AVAILABLE_TICKERS])];
+  const container=document.getElementById("ticker-selector");
+  allTickers.forEach(t=>{
+    const btn=document.createElement("button");
+    const hasData=!!returnsData[t];
+    btn.className="ticker-btn"+(optData.tickers.includes(t)?" active":"")+(hasData?"":" unavailable");
+    btn.textContent=t;btn.dataset.ticker=t;
+    btn.title=hasData?"":"Données non disponibles — ajoute ce ticker au collector";
+    btn.onclick=()=>toggleTicker(t,btn);
+    container.appendChild(btn);
   });
+  selectedTickers=[...optData.tickers];
+  selectedTickers.forEach(t=>{weights[t]=+(1/selectedTickers.length).toFixed(4);});
+  buildSliders();
 }
 
-/* ── KPIs ── */
-function renderKPIs(opt, risk) {
-  const bs = opt.best_sharpe;
-  setEl("kpi-return",  pct(bs.return));
-  setEl("kpi-vol",     pct2(bs.volatility));
-  setEl("kpi-sharpe",  fmt2(bs.sharpe));
-  setEl("kpi-var",     "-" + pct2(risk.var_es.VaR.mc_1d));
-}
-
-/* ── Scatter (frontière efficiente) ── */
-function renderScatter(opt) {
-  // Sous-échantillon : 2000 points max pour la perf
-  const all = opt.portfolios;
-  const step = Math.max(1, Math.floor(all.length / 2000));
-  const sample = all.filter((_, i) => i % step === 0);
-
-  const mainData = sample.map(p => ({ x: +(p.volatility * 100).toFixed(3), y: +(p.return * 100).toFixed(3) }));
-  const frontierData = opt.frontier.map(p => ({ x: +(p.volatility * 100).toFixed(3), y: +(p.return * 100).toFixed(3) }));
-  const sharpePoint = [{ x: +(opt.best_sharpe.volatility * 100).toFixed(3), y: +(opt.best_sharpe.return * 100).toFixed(3) }];
-  const minVolPoint = [{ x: +(opt.min_vol.volatility * 100).toFixed(3), y: +(opt.min_vol.return * 100).toFixed(3) }];
-
-  const ctx = document.getElementById("scatter-chart").getContext("2d");
-  new Chart(ctx, {
-    type: "scatter",
-    data: {
-      datasets: [
-        {
-          label: "Simulations",
-          data: mainData,
-          pointRadius: 1.5,
-          pointBackgroundColor: "rgba(79,142,247,0.25)",
-          pointBorderWidth: 0,
-        },
-        {
-          label: "Frontière efficiente",
-          data: frontierData,
-          type: "line",
-          pointRadius: 0,
-          borderColor: "rgba(79,142,247,0.7)",
-          borderWidth: 1.5,
-          fill: false,
-          tension: 0.4,
-        },
-        {
-          label: "Meilleur Sharpe",
-          data: sharpePoint,
-          pointRadius: 6,
-          pointBackgroundColor: "#f5a623",
-          pointBorderWidth: 0,
-        },
-        {
-          label: "Min volatilité",
-          data: minVolPoint,
-          pointRadius: 6,
-          pointBackgroundColor: "#3ecf8e",
-          pointBorderWidth: 0,
-        },
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: "#686878",
-            font: { family: "'IBM Plex Mono'", size: 10 },
-            boxWidth: 8,
-            padding: 12,
-          }
-        },
-        tooltip: {
-          backgroundColor: "#111114",
-          borderColor: "#333340",
-          borderWidth: 1,
-          titleColor: "#e8e8ec",
-          bodyColor: "#686878",
-          titleFont: { family: "'IBM Plex Mono'", size: 11 },
-          bodyFont: { family: "'IBM Plex Mono'", size: 10 },
-          callbacks: {
-            label: ctx => `Vol: ${ctx.parsed.x.toFixed(2)}%  Ret: ${ctx.parsed.y.toFixed(2)}%`
-          }
-        }
-      },
-      scales: {
-        x: {
-          title: { display: true, text: "Volatilité (%)", color: "#3a3a48", font: { size: 10, family: "'IBM Plex Mono'" } },
-          grid: { color: "#18181c" },
-          ticks: { color: "#3a3a48", font: { family: "'IBM Plex Mono'", size: 10 } }
-        },
-        y: {
-          title: { display: true, text: "Rendement (%)", color: "#3a3a48", font: { size: 10, family: "'IBM Plex Mono'" } },
-          grid: { color: "#18181c" },
-          ticks: { color: "#3a3a48", font: { family: "'IBM Plex Mono'", size: 10 } }
-        }
-      }
+async function toggleTicker(ticker,btn){
+  if(btn.classList.contains("unavailable"))return;
+  if(selectedTickers.includes(ticker)){
+    if(selectedTickers.length<=1)return;
+    selectedTickers=selectedTickers.filter(t=>t!==ticker);
+    delete weights[ticker];btn.classList.remove("active");
+  }else{
+    if(!returnsData[ticker]){
+      btn.textContent="...";
+      const r=await loadReturnsCSV(ticker);
+      btn.textContent=ticker;
+      if(!r){btn.classList.add("unavailable");btn.title="Données non disponibles";return;}
+      returnsData[ticker]=r;
     }
-  });
+    selectedTickers.push(ticker);weights[ticker]=0;btn.classList.add("active");
+  }
+  normalizeWeights();buildSliders();
 }
 
-/* ── Allocation ── */
-function renderAllocation(opt) {
-  const weights = opt.best_sharpe.weights;
-  const list = document.getElementById("alloc-list");
-  const sorted = Object.entries(weights).sort((a, b) => b[1] - a[1]);
-  const max = sorted[0][1];
-  sorted.forEach(([ticker, w]) => {
-    const row = document.createElement("div");
-    row.className = "alloc-row";
-    row.innerHTML = `
-      <span class="alloc-ticker">${ticker}</span>
-      <div class="alloc-bar-bg">
-        <div class="alloc-bar-fill" style="width:${(w / max * 100).toFixed(1)}%"></div>
-      </div>
-      <span class="alloc-pct">${(w * 100).toFixed(1)}%</span>
-    `;
-    list.appendChild(row);
+function buildSliders(){
+  const grid=document.getElementById("sliders-grid");grid.innerHTML="";
+  selectedTickers.forEach(t=>{
+    const row=document.createElement("div");row.className="slider-row";
+    const pv=Math.round((weights[t]||0)*100);
+    row.innerHTML=`<span class="slider-ticker">${t}</span><input type="range" min="0" max="100" step="1" value="${pv}" id="slider-${t}" oninput="onSliderChange('${t}',this.value)" /><span class="slider-pct" id="pct-${t}">${pv}%</span>`;
+    grid.appendChild(row);
   });
+  updateWeightsTotal();computeCustomPortfolio();
 }
 
-/* ── Risk table ── */
-function renderRisk(risk) {
-  const v = risk.var_es;
-  const rows = [
-    ["VaR historique 1j",  "-" + pct2(v.VaR.historical_1d), true],
-    ["VaR Monte Carlo 1j", "-" + pct2(v.VaR.mc_1d), true],
-    ["VaR MC 10j",         "-" + pct2(v.VaR.mc_10d), true],
-    ["VaR MC 1 an",        "-" + pct2(v.VaR.mc_1y), true],
-    ["ES historique",      "-" + pct2(v.ES.historical), true],
-    ["ES Monte Carlo",     "-" + pct2(v.ES.mc), true],
-  ];
-  const table = document.getElementById("risk-table");
-  rows.forEach(([label, val, neg]) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${label}</td><td class="${neg ? 'neg' : ''}">${val}</td>`;
-    table.appendChild(tr);
-  });
+function onSliderChange(ticker,val){weights[ticker]=parseInt(val)/100;document.getElementById(`pct-${ticker}`).textContent=val+"%";updateWeightsTotal();computeCustomPortfolio();}
+
+function updateWeightsTotal(){
+  const total=selectedTickers.reduce((s,t)=>s+(weights[t]||0),0);
+  const pt=Math.round(total*100);
+  const el=document.getElementById("weights-total");
+  el.textContent=`Total : ${pt}%`;el.className="weights-total "+(pt===100?"ok":"warn");
 }
 
-/* ── Stress tests ── */
-function renderStress(risk) {
-  const s = risk.stress_test;
-  const sh = risk.shocks;
-  const list = document.getElementById("stress-list");
+function normalizeWeights(){
+  const total=selectedTickers.reduce((s,t)=>s+(weights[t]||0),0);
+  const eq=1/selectedTickers.length;
+  selectedTickers.forEach(t=>{weights[t]=total===0?eq:(weights[t]||0)/total;});
+  buildSliders();
+}
 
-  const rows = [
-    {
-      label: "Pire jour",
-      html: `<span class="badge-danger">${pct(s.worst_day.return)} · ${s.worst_day.date}</span>`
-    },
-    {
-      label: "5 pires jours cumulés",
-      html: `<span class="stress-val" style="color:var(--red)">${pct(s.worst_5_days_cumulative)}</span>`
-    },
-    {
-      label: "Max drawdown",
-      html: `<span class="stress-val" style="color:var(--red)">${pct(s.max_drawdown)}</span>`
-    },
-    {
-      label: "Choc vol +20%",
-      html: `<span class="badge-warn">VaR ${pct2(sh.vol_shock.VaR_1d)}</span>`
-    },
-    {
-      label: "Choc return +15%",
-      html: `<span class="badge-warn">VaR ${pct2(sh.return_shock.VaR_1d)}</span>`
-    },
-    {
-      label: `Jump ${pct(sh.jump_shock.jump_size)} (p=${sh.jump_shock.jump_prob})`,
-      html: `<span class="badge-warn">VaR ${pct2(sh.jump_shock.VaR_1d)}</span>`
-    },
-  ];
+function getPortReturns(){
+  const tickers=selectedTickers.filter(t=>returnsData[t]);
+  if(tickers.length===0)return null;
+  const total=tickers.reduce((s,t)=>s+(weights[t]||0),0);
+  if(total===0)return null;
+  const w=tickers.map(t=>(weights[t]||0)/total);
+  const minLen=Math.min(...tickers.map(t=>returnsData[t].length));
+  const pr=[];
+  for(let i=0;i<minLen;i++){let r=0;tickers.forEach((t,j)=>{r+=w[j]*returnsData[t][i];});pr.push(r);}
+  return pr;
+}
 
-  rows.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "stress-row";
-    div.innerHTML = `<span class="stress-label">${r.label}</span>${r.html}`;
-    list.appendChild(div);
-  });
+function computeCustomPortfolio(){
+  const pr=getPortReturns();if(!pr)return;
+  const n=pr.length;
+  const mu=pr.reduce((a,b)=>a+b,0)/n;
+  const vol=Math.sqrt(pr.reduce((s,r)=>s+(r-mu)**2,0)/n);
+  const annR=mu*252,annV=vol*Math.sqrt(252),sharpe=(annR-RF)/annV;
+  const sorted=[...pr].sort((a,b)=>a-b);
+  const varH=-sorted[Math.floor(0.05*sorted.length)];
+  setEl("c-return",pct(annR));setEl("c-vol",pct2(annV));setEl("c-sharpe",fmt2(sharpe));setEl("c-var","-"+pct2(varH));
+  document.getElementById("c-return").className="kpi-value "+(annR>=0?"pos":"neg");
+  document.getElementById("c-sharpe").className="kpi-value "+(sharpe>=1?"pos":sharpe>=0?"":"neg");
+  computeCustomStress();
+}
+
+function randn(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+
+function computeCustomStress(){
+  const pr=getPortReturns();if(!pr)return;
+  const n=pr.length;
+  const mu=pr.reduce((a,b)=>a+b,0)/n;
+  const vol=Math.sqrt(pr.reduce((s,r)=>s+(r-mu)**2,0)/n);
+  const volShock=(parseFloat(document.getElementById("in-vol-shock").value)||20)/100;
+  const retShock=(parseFloat(document.getElementById("in-ret-shock").value)||15)/100;
+  const jumpSize=(parseFloat(document.getElementById("in-jump-size").value)||-10)/100;
+  const jumpProb=(parseFloat(document.getElementById("in-jump-prob").value)||5)/100;
+  const confidence=(parseFloat(document.getElementById("in-confidence").value)||95)/100;
+  const alpha=1-confidence,N=30000;
+  const q=arr=>{arr.sort((a,b)=>a-b);return-arr[Math.floor(alpha*N)];};
+  const varBase=q(Array.from({length:N},()=>mu+vol*randn()));
+  const varVol=q(Array.from({length:N},()=>mu+vol*(1+volShock)*randn()));
+  const varRet=q(Array.from({length:N},()=>mu*(1+retShock)+vol*randn()));
+  const varJump=q(Array.from({length:N},()=>mu+vol*randn()+(Math.random()<jumpProb?jumpSize:0)));
+  const list=document.getElementById("custom-stress-list");list.innerHTML="";
+  [{label:`VaR baseline (conf. ${(confidence*100).toFixed(0)}%)`,html:`<span class="badge-warn">${pct2(varBase)}</span>`},{label:`Choc vol +${(volShock*100).toFixed(0)}%`,html:`<span class="badge-warn">${pct2(varVol)}</span>`},{label:`Choc return +${(retShock*100).toFixed(0)}%`,html:`<span class="badge-warn">${pct2(varRet)}</span>`},{label:`Jump ${(jumpSize*100).toFixed(0)}% (p=${(jumpProb*100).toFixed(1)}%)`,html:`<span class="badge-warn">${pct2(varJump)}</span>`}].forEach(r=>{const d=document.createElement("div");d.className="stress-row";d.innerHTML=`<span class="stress-label">${r.label}</span>${r.html}`;list.appendChild(d);});
 }
 
 init();
