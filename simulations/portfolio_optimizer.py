@@ -40,7 +40,7 @@ def efficient_frontier(port_returns, port_vols, n_bins=30):
     )
     return frontier
 
-def optimize(tickers, n_simulations=100000, risk_free_rate=0.02):
+def optimize(tickers, n_simulations=500000, risk_free_rate=0.02):
     """
     Lance la simulation complète et retourne tous les résultats
     Retourne un dict prêt à être sérialisé en JSON pour le site
