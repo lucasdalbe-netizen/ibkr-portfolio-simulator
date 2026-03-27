@@ -1,22 +1,9 @@
 {
   "tickers": [
     "GOOGL",
-    "PYPL",
-    "PG",
-    "MA",
     "NVDA",
-    "ADBE",
-    "META",
-    "JNJ",
-    "UNH",
-    "TSLA",
-    "HD",
-    "NFLX",
-    "DIS",
-    "CRM",
     "MSFT",
     "AMZN",
-    "V",
     "AAPL",
     "JPM"
   ],
@@ -24,37 +11,37 @@
   "var_es": {
     "confidence": 0.95,
     "VaR": {
-      "historical_1d": 0.0174,
-      "mc_1d": 0.0198,
-      "mc_10d": 0.0626,
-      "mc_1y": 0.3143
+      "historical_1d": 0.0196,
+      "mc_1d": 0.0235,
+      "mc_10d": 0.0743,
+      "mc_1y": 0.3731
     },
     "ES": {
-      "historical": 0.0281,
-      "mc": 0.0248
+      "historical": 0.0342,
+      "mc": 0.0297
     }
   },
   "stress_test": {
     "worst_day": {
-      "return": -0.0576,
-      "date": "2025-04-04"
+      "return": -0.068,
+      "date": "2025-04-03"
     },
-    "worst_5_days_cumulative": -0.175,
-    "max_drawdown": -0.16
+    "worst_5_days_cumulative": -0.2094,
+    "max_drawdown": -0.135
   },
   "shocks": {
     "vol_shock": {
       "shock_applied": 0.2,
-      "VaR_1d": 0.0239
+      "VaR_1d": 0.0284
     },
     "return_shock": {
       "shock_applied": 0.15,
-      "VaR_1d": 0.0199
+      "VaR_1d": 0.0237
     },
     "jump_shock": {
       "jump_size": -0.1,
       "jump_prob": 0.05,
-      "VaR_1d": 0.075
+      "VaR_1d": 0.046
     }
   }
 }
