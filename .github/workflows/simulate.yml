@@ -31,7 +31,7 @@ jobs:
           sys.path.insert(0, '.')
           from simulations.portfolio_optimizer import optimize
 
-          tickers = [f.replace('_5y_1d.csv', '') for f in os.listdir('data/historical') if f.endswith('.csv')]
+          tickers = [f.replace('_1y.csv', '') for f in os.listdir('data/historical') if f.endswith('.csv')]
           if len(tickers) < 2:
               print('Pas assez de tickers pour optimiser.')
               sys.exit(0)
@@ -53,7 +53,7 @@ jobs:
           sys.path.insert(0, '.')
           from simulations.risk import analyze
 
-          tickers = [f.replace('_5y_1d.csv', '') for f in os.listdir('data/historical') if f.endswith('.csv')]
+          tickers = [f.replace('_1y.csv', '') for f in os.listdir('data/historical') if f.endswith('.csv')]
           if len(tickers) < 1:
               print('Pas de tickers disponibles.')
               sys.exit(0)
