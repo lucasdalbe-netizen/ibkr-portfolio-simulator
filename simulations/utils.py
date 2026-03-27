@@ -5,7 +5,7 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data'
 
 def load_historical(ticker):
     """Charge les données historiques d'un ticker depuis data/historical/"""
-    path = os.path.join(DATA_DIR, 'historical', f'{ticker}_5y_1d.csv')
+    path = os.path.join(DATA_DIR, 'historical', f'{ticker}_1y.csv')
     if not os.path.exists(path):
         raise FileNotFoundError(f"Pas de données pour {ticker} — lance d'abord le collector.")
     df = pd.read_csv(path)
