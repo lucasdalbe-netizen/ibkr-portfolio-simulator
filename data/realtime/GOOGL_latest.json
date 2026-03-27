@@ -1,11 +1,11 @@
 {
   "ticker": "GOOGL",
-  "timestamp": "2026-03-27T10:36:27.491184",
-  "last": 279.67,
-  "bid": 279.3,
+  "timestamp": "2026-03-27T10:42:33.663841",
+  "last": 279.55,
+  "bid": 279.4,
   "ask": 280.0,
   "high": NaN,
   "low": NaN,
-  "volume": 142793.0,
+  "volume": 145558.0,
   "close": 280.92
 }
