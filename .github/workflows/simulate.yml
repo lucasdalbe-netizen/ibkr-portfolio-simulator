@@ -1,0 +1,77 @@
+name: Run Simulations
+
+on:
+  push:
+    paths:
+      - "data/historical/**"
+      - "data/realtime/**"
+  workflow_dispatch:  # déclenchement manuel aussi possible
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install numpy pandas
+
+      - name: Run portfolio optimizer
+        run: |
+          python -c "
+          import json, sys, os
+          sys.path.insert(0, '.')
+          from simulations.portfolio_optimizer import optimize
+
+          tickers = [f.replace('_5y_1d.csv', '') for f in os.listdir('data/historical') if f.endswith('.csv')]
+          if len(tickers) < 2:
+              print('Pas assez de tickers pour optimiser.')
+              sys.exit(0)
+
+          print(f'Tickers détectés : {tickers}')
+          result = optimize(tickers)
+
+          os.makedirs('results', exist_ok=True)
+          with open('results/portfolio_optimization.json', 'w') as f:
+              json.dump(result, f, indent=2)
+          print('Portfolio optimization done.')
+          "
+
+      - name: Run risk analysis
+        run: |
+          python -c "
+          import json, sys, os
+          sys.path.insert(0, '.')
+          from simulations.risk import analyze
+
+          tickers = [f.replace('_5y_1d.csv', '') for f in os.listdir('data/historical') if f.endswith('.csv')]
+          if len(tickers) < 1:
+              print('Pas de tickers disponibles.')
+              sys.exit(0)
+
+          print(f'Tickers détectés : {tickers}')
+          result = analyze(tickers)
+
+          os.makedirs('results', exist_ok=True)
+          with open('results/risk_analysis.json', 'w') as f:
+              json.dump(result, f, indent=2)
+          print('Risk analysis done.')
+          "
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/
+          git diff --cached --quiet || git commit -m "Auto: update simulation results [skip ci]"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

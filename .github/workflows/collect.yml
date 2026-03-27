@@ -1,0 +1,45 @@
+name: Collect Data (manual)
+
+# Ce workflow est informatif — la collecte se fait sur ton PC local.
+# Lance collect.py depuis ton terminal, puis push_to_github.py.
+# Ce workflow peut être déclenché manuellement pour vérifier l'état du repo.
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Note de collecte (optionnel)"
+        required: false
+        default: "Collecte manuelle"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Afficher les données disponibles
+        run: |
+          echo "=== Données historiques ==="
+          ls data/historical/ 2>/dev/null || echo "Aucune donnée historique trouvée."
+
+          echo ""
+          echo "=== Snapshots temps réel ==="
+          ls data/realtime/ 2>/dev/null || echo "Aucun snapshot trouvé."
+
+          echo ""
+          echo "=== Résultats de simulation ==="
+          ls results/ 2>/dev/null || echo "Aucun résultat trouvé."
+
+      - name: Rappel procédure collecte locale
+        run: |
+          echo ""
+          echo "Pour collecter les données depuis IB Gateway :"
+          echo "  1. Lance IB Gateway sur ton PC (port 4002, clientId=1, marketDataType=3)"
+          echo "  2. cd ibkr-portfolio-simulator"
+          echo "  3. python collector/ibkr_collector.py"
+          echo "  4. python collector/push_to_github.py"
+          echo ""
+          echo "Les simulations se déclencheront automatiquement après le push."
