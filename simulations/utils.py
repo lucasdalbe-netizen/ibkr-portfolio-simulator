@@ -9,8 +9,9 @@ def load_historical(ticker):
     if not os.path.exists(path):
         raise FileNotFoundError(f"Pas de données pour {ticker} — lance d'abord le collector.")
     df = pd.read_csv(path)
-    df['Date'] = pd.to_datetime(df['Date'])
-    df.set_index('Date', inplace=True)
+    col = 'date' if 'date' in df.columns else 'Date'
+    df[col] = pd.to_datetime(df[col])
+    df.set_index(col, inplace=True)
     df = df[['Open', 'High', 'Low', 'Close', 'Volume']].copy()
     df.columns = ['open', 'high', 'low', 'close', 'volume']
     df['return'] = df['close'].pct_change()  # ← ajout
