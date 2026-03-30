@@ -1,11 +1,11 @@
 {
   "ticker": "AAPL",
-  "timestamp": "2026-03-29T11:56:43.206696",
-  "last": 247.25,
+  "timestamp": "2026-03-30T13:45:00.673085",
+  "last": NaN,
   "bid": NaN,
   "ask": NaN,
-  "high": 255.49,
-  "low": 248.07,
-  "volume": 4794752165367.0,
-  "close": 252.89
+  "high": NaN,
+  "low": NaN,
+  "volume": NaN,
+  "close": NaN
 }
