@@ -32,16 +32,16 @@
   "shocks": {
     "vol_shock": {
       "shock_applied": 0.2,
-      "VaR_1d": 0.0283
+      "VaR_1d": 0.0284
     },
     "return_shock": {
       "shock_applied": 0.15,
-      "VaR_1d": 0.0234
+      "VaR_1d": 0.0232
     },
     "jump_shock": {
       "jump_size": -0.1,
       "jump_prob": 0.05,
-      "VaR_1d": 0.0616
+      "VaR_1d": 0.0529
     }
   }
 }
